@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tin tức mới nhất</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background: #1e88e5;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .news-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    .news-item {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .news-item img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    .news-item h2 {
+      margin: 10px 0 5px;
+    }
+    .news-item p {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tin tức mới nhất</h1>
+  </header>
+  <div class="news-container" id="news"></div>
+
+  <script>
+    const apiKey = "YOUR_API_KEY_HERE"; // <- Thay bằng API key của bạn
+    const apiUrl = `https://newsapi.org/v2/top-headlines?country=vn&pageSize=10&apiKey=${apiKey}`;
+
+    async function fetchNews() {
+      try {
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+        const newsContainer = document.getElementById("news");
+
+        data.articles.forEach(article => {
+          const div = document.createElement("div");
+          div.className = "news-item";
+          div.innerHTML = `
+            <img src="${article.urlToImage || ''}" alt="">
+            <h2>${article.title}</h2>
+            <p>${article.description || ''}</p>
+            <a href="${article.url}" target="_blank">Xem chi tiết</a>
+          `;
+          newsContainer.appendChild(div);
+        });
+      } catch (error) {
+        console.error("Lỗi tải tin tức:", error);
+      }
+    }
+
+    fetchNews();
+  </script>
+</body>
+</html>
